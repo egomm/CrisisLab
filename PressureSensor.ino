@@ -24,8 +24,6 @@ void setup() {
         // Wait a bit to see if connection is established
         delay(1000);
     }
-
-    Serial.println("BMP384 connected!");
 }
 
 void loop() {
@@ -36,10 +34,9 @@ void loop() {
     // Check whether data was acquired successfully
     if (err == BMP3_OK) {
         // Acquisistion succeeded, print temperature and pressure
-        Serial.print("Temperature (C): ");
-        Serial.print(data.temperature);
-        Serial.print("\t\t");
-        Serial.print("Pressure (Pa): ");
+        // Serial.print("Temperature (C): ");
+        // Serial.print(data.temperature);
+        // Serial.print("\t\t");
         Serial.println(data.pressure);
     } else {
         // Acquisition failed, most likely a communication error (code -2)
