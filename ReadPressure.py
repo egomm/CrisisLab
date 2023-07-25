@@ -1,6 +1,6 @@
 import serial
 
-ser = serial.Serial("COM3", baudrate= 115200, timeout=2.5)
+ser = serial.Serial("COM3", baudrate=115200, timeout=2.5)
 while ser.isOpen():
     ser.flush()
     try:
@@ -8,5 +8,6 @@ while ser.isOpen():
         print(incoming)
     except Exception as e:
         print(e)
-        pass    
+        continue
+    
 ser.close()
