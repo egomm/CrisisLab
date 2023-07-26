@@ -10,7 +10,6 @@ uint8_t i2cAddress = BMP384_I2C_ADDRESS_DEFAULT; // 0x77
 void setup() {
     // Start serial
     Serial.begin(115200);
-    Serial.println("BMP384 Begins!"); 
 
     // Initialize the I2C library
     Wire.begin();
