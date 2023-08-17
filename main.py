@@ -1,16 +1,23 @@
 import serial
 import matplotlib.pyplot as plt
+import threading
+from SendEmail import send_email
 
 ser = serial.Serial("COM4", baudrate=115200, timeout=2.5)
 
+# Define the constants
 MIN = 2
 MAX = 20
-plt.ion()
-plt.title("Tsunami Detector")
 
 ROU = 1.0
 GRA = 9.81
 
+WARNING_HEIGHT = 100
+RECIPIENTS = ["20130@wc.school.nz"]
+
+# Initzialize the graph
+plt.ion()
+plt.title("Tsunami Detector")
 fig, axis = plt.subplots(1, 2)
 fig.canvas.manager.full_screen_toggle()
 fig.subplots_adjust(wspace=0.4)
@@ -29,19 +36,24 @@ i = 0
 while ser.isOpen():
     ser.flush()
     try:
-        incoming = ser.readline().decode("UTF-8").rstrip()
-        print(incoming)
+        # Receive the incoming graph
+        incoming = float(ser.readline().decode("UTF-8").rstrip())
+        height = incoming / (ROU * GRA)
+        print(height)
+        
+        # Send warning email if height is larger
+        if (height > WARNING_HEIGHT):
+            t = threading.Thread(target=send_email, args=[RECIPIENTS, height])
+            t.run()
 
         # Init the graph when the value is stablized.
         if i == MIN:
-            incoming = float(incoming)
             x = [0]
             y = [incoming]
             ax.set_xlim(0, MAX)
             ax.set_ylim(incoming - incoming * 0.3, incoming + incoming * 0.3)
             line1, = ax.plot(x, y)
 
-            height = incoming / (ROU * GRA)
             y2 = [height]
             ax2.set_xlim(0, MAX)
             ax2.set_ylim(height - height * 0.3, height + height * 0.3)

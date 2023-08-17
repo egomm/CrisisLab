@@ -1,20 +1,21 @@
-import smtplib
 
-smtp = smtplib.SMTP("smtp.office365.com", port=587)
-smtp.starttls()
-smtp.login('crisislabbot@outlook.com', 'CrisisLab')
+def send_email(recipients, height):
+    import smtplib
 
-FROM = "crisislabbot@outlook.com"
-TO = ["egomyt@gmail.com", "20130@wc.school.nz"] # must be a list
+    smtp = smtplib.SMTP("smtp.office365.com", port=587)
+    smtp.starttls()
+    smtp.login('crisislabbot@outlook.com', 'CrisisLab')
 
-SUBJECT = "Test Email"
-TEXT = "CrisisLab gives you a warning!"
+    FROM = "crisislabbot@outlook.com"
+    TO = recipients
 
-# Prepare actual message
-message = """From: %s\r\nTo: %s\r\nSubject: %s\r\n\
+    SUBJECT = "CrisisLab Warning!"
+    TEXT = "CrisisLab has detected a possible tsunami with a height of %dm. Please be prepared." % height
 
-%s
-""" % (FROM, ", ".join(TO), SUBJECT, TEXT)
+    message = """From: %s\r\nTo: %s\r\nSubject: %s\r\n\
 
-smtp.sendmail(FROM, TO, message)
-smtp.quit()
+    %s
+    """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
+
+    smtp.sendmail(FROM, TO, message)
+    smtp.quit()
