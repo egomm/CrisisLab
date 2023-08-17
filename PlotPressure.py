@@ -17,7 +17,7 @@ ax.set_ylim(0, 1)
 
 i = 0
 while True:
-    x.append(x[-1] + 1)
+    x.append(x[-1] + 1000)
     y.append(random.random())
 
     if (i >= MAX):
