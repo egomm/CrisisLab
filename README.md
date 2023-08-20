@@ -1,5 +1,5 @@
 # CrisisLab
-This is a CrisisLab Project.  
+This project is a tsunami sensor for CrisisLab.
 [https://github.com/egomm/CrisisLab](https://github.com/egomm/CrisisLab)
 
 Features:
