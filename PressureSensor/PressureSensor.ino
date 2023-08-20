@@ -15,10 +15,9 @@ void setup() {
     Wire.begin();
 
     // Check if sensor is connected and initialize
-    // Address is optional (defaults to 0x77)
     while (PressureSensor.beginI2C(i2cAddress) != BMP3_OK) {
         // Not connected, inform user
-        Serial.println("Error: BMP384 not connected, check wiring and I2C address!");
+        Serial.println("Error: Pressure Sensor not Connected!");
         // Wait a bit to see if connection is established
         delay(1000);
     }
@@ -29,18 +28,11 @@ void loop() {
     bmp3_data data = {0};
     int8_t err = PressureSensor.getSensorData(&data);
 
-    // Check whether data was acquired successfully
+    // Check whether data was received successfully
     if (err == BMP3_OK) {
-        /* Acquisistion succeeded, print temperature and pressure
-        Serial.print("Temperature (C): ");
-        Serial.print(data.temperature);
-        */
         Serial.println(data.pressure);
-    } else {
-        // Acquisition failed, most likely a communication error (code -2)
-        Serial.println("Error getting data from sensor! Error code: ");
-        Serial.println(err);
     }
 
-    delay(1000);
+    // Get pressure data every 250ms
+    delay(250);
 }
