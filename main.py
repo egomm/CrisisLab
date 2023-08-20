@@ -35,7 +35,7 @@ GRA = 9.81
 
 WARNING_HEIGHT = 20 
 # Email addresses to alert
-RECIPIENTS = ["20130@wc.school.nz", "20140@wc.school.nz"]
+RECIPIENTS = []
 
 # Initialize the graph
 plt.ion()
