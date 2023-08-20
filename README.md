@@ -1,5 +1,5 @@
 # CrisisLab
-This project is a tsunami sensor for CrisisLab.
+This project is a tsunami sensor for CrisisLab.  
 [https://github.com/egomm/CrisisLab](https://github.com/egomm/CrisisLab)
 
 Features:
@@ -10,4 +10,4 @@ Features:
 - Send a warning email every 10 minutes if the height is above the maximum.  
 
 
-![image](https://github.com/egomm/CrisisLab/assets/30309285/1357b674-d96e-415f-814f-e6906a34a4cc)
+![image](https://github.com/egomm/CrisisLab/assets/30309285/f54a15c6-b6dd-466d-aac8-6bbabbf0f59e)
