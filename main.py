@@ -16,7 +16,7 @@ else:
 MIN = 2
 MAX = 20
 # The base may change depending on the room/air
-BASE = 101000
+BASE = 102000
 
 ROU = 1000 # Density in kg/m^3
 GRA = 9.81
