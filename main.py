@@ -56,15 +56,8 @@ while True:
             # Multiply by 100 to convert to cm
             height = max(100 * (incoming - BASE) / (ROU * GRA), 0)
 
-            max_height = max(height, max_height)
-            low_height = min(height, low_height)
-            # Send warning email if height is larger
-            if (max_height - low_height) > WARNING_HEIGHT:
-                # Limit emails to every 10 minutes
-                if time.time() - last_time > 600:
-                    last_time = time.time()
-                    t = threading.Thread(target=send_email, args=[RECIPIENTS, height])
-                    t.run()
+            #max_height = max(height, max_height)
+            #low_height = min(height, low_height)
 
             # Initialize the graph when the value is stabilized.
             if i == MIN:
@@ -83,9 +76,17 @@ while True:
             if i > MIN:
                 x.append(x[-1] + 0.25)
                 y.append(incoming)
-
-                # Calculate height only once here
                 y2.append(height)
+
+                amplitude = (max(y2) - min(y2)) / 2
+                print("Amplitude: ", amplitude)
+                # Send warning email if height is larger
+                if (amplitude) > WARNING_HEIGHT:
+                    # Limit emails to every 10 minutes
+                    if time.time() - last_time > 600:
+                        last_time = time.time()
+                        t = threading.Thread(target=send_email, args=[RECIPIENTS, height])
+                        t.run()
 
                 if x[-1] >= MAX:
                     x.pop(0)

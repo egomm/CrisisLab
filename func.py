@@ -32,6 +32,7 @@ def find_port(start_port=1, max_port=256):
             # Return the valid port
             return port_name
         except serial.SerialException as e:
+            print("Error:")
             print(e)
             continue
     return None
