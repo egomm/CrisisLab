@@ -9,7 +9,7 @@ def send_email(recipients, height):
     TO = recipients
 
     SUBJECT = "CrisisLab Warning!"
-    TEXT = "CrisisLab has detected a possible tsunami with a height of %dm. Please be prepared." % height
+    TEXT = "CrisisLab has detected a possible tsunami with a height of %dcm. Please be prepared." % height
 
     message = """From: %s\r\nTo: %s\r\nSubject: %s\r\n\
 

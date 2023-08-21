@@ -64,7 +64,7 @@ while True:
 
                 y2 = [height]
                 ax2.set_xlim(0, MAX)
-                ax2.set_ylim(height - height * 0.3, height + height * 0.3)
+                ax2.set_ylim(min(min(y2) - max(max(y2), 10) * 0.3, -3), max(max(y2) + max(y2)* 0.3, 10))
                 line2, = ax2.plot(x, y2)
 
                 figtext = ax2.text(0.95, 0.01, "Amplitude: 0cm",
@@ -103,7 +103,7 @@ while True:
 
                 line2.set_xdata(x)
                 line2.set_ydata(y2)
-                ax2.set_ylim(min(y2) - max(y2) * 0.3, max(y2) + max(y2) * 0.3)
+                ax2.set_ylim(min(min(y2) - max(max(y2), 10) * 0.3, -3), max(max(y2) + max(y2)* 0.3, 10))
                 #display_max_height = max(y2) # Changed this as y2 is already the dataset(within MAX)
                 #if display_max_height == 0:
                 #    display_max_height = 10
