@@ -3,31 +3,17 @@ import matplotlib.pyplot as plt
 import time
 import math
 import threading
-from SendEmail import send_email
+from func import send_email, find_port
 
-# Function for finding an available port
-def find_available_com_port(start_port=1, max_port=256):
-    for port_number in range(start_port, max_port + 1):
-        port_name = f"COM{port_number}"
-        try:
-            ser = serial.Serial(port_name, baudrate=115200, timeout=2.5,
-                                parity=serial.PARITY_NONE, bytesize=serial.EIGHTBITS,
-                                stopbits=serial.STOPBITS_ONE)
-            ser.close()  # Close the port after opening to test availability
-            # Return the valid port
-            return port_name
-        except serial.SerialException:
-            continue
-    return None
 
-COM_PORT = find_available_com_port()
+COM_PORT = find_port()
 if COM_PORT is not None:
     ser = serial.Serial(COM_PORT, baudrate=115200, timeout=2.5)
 else:
     exit()
 
 # Define the constants
-MIN = 0
+MIN = 2
 MAX = 20
 # The base may change depending on the room/air
 BASE = 101000
@@ -35,6 +21,8 @@ BASE = 101000
 ROU = 1000 # Density in kg/m^3
 GRA = 9.81
 
+max_height = 0
+low_height = math.inf
 WARNING_HEIGHT = 20 
 # Email addresses to alert
 RECIPIENTS = []
@@ -56,7 +44,7 @@ ax2.set_title("Height Against Time")
 ax2.set_xlabel("Time (s)")
 ax2.set_ylabel("Height (cm)")
 
-last_email_time = 0
+last_time = 0
 start_time = time.time()
 i = 0
 while True:
@@ -66,16 +54,15 @@ while True:
             # Receive the incoming graph
             incoming = float(ser.readline().decode("UTF-8").rstrip())
             # Multiply by 100 to convert to cm
-            height = 100 * (incoming - BASE) / (ROU * GRA)
-            # To account for calibration errors
-            if height < 0:
-                height = 0
+            height = max(100 * (incoming - BASE) / (ROU * GRA), 0)
 
+            max_height = max(height, max_height)
+            low_height = min(height, low_height)
             # Send warning email if height is larger
-            if height > WARNING_HEIGHT:
+            if (max_height - low_height) > WARNING_HEIGHT:
                 # Limit emails to every 10 minutes
-                if time.time() - last_email_time > 600:
-                    last_email_time = time.time()
+                if time.time() - last_time > 600:
+                    last_time = time.time()
                     t = threading.Thread(target=send_email, args=[RECIPIENTS, height])
                     t.run()
 
@@ -100,7 +87,7 @@ while True:
                 # Calculate height only once here
                 y2.append(height)
 
-                if i >= MAX:
+                if x[-1] >= MAX:
                     x.pop(0)
                     y.pop(0)
                     y2.pop(0)
@@ -109,18 +96,20 @@ while True:
 
                 line1.set_xdata(x)
                 line1.set_ydata(y)
-                ax.set_ylim(incoming - incoming * 0.3, incoming + incoming * 0.3)
+                ax.set_ylim(min(y) - max(y) * 0.3, max(y) + max(y) * 0.3)
+                #ax.set_ylim(incoming - incoming * 0.3, incoming + incoming * 0.3)
 
                 line2.set_xdata(x)
                 line2.set_ydata(y2)
-                #ax2.set_ylim(height - height * 0.3, height + height * 0.3)
-                display_max_height = max(y2[-MAX:])
-                if display_max_height == 0:
-                    display_max_height = 10
-                ax2.set_ylim(0, math.ceil(display_max_height/20)*20)
+                ax2.set_ylim(min(y2) - max(y2) * 0.3, max(y2) + max(y2) * 0.3)
+                #display_max_height = max(y2) # Changed this as y2 is already the dataset(within MAX)
+                #if display_max_height == 0:
+                #    display_max_height = 10
+                #ax2.set_ylim(0, math.ceil(display_max_height / 20) * 20)
                 fig.canvas.draw()
                 fig.canvas.flush_events()
-            i = time.time() - start_time
+
+            i += 0.25
         except Exception as e:
             print("Error:")
             print(e)
