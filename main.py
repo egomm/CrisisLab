@@ -72,6 +72,10 @@ while True:
                 ax2.set_ylim(height - height * 0.3, height + height * 0.3)
                 line2, = ax2.plot(x, y2)
 
+                figtext = ax2.text(0.95, 0.01, "Amplitude: 0cm",
+                verticalalignment='bottom', horizontalalignment='right',
+                transform=ax2.transAxes, fontsize=12)
+
             # Update the graph and plot it.
             if i > MIN:
                 x.append(x[-1] + 0.25)
@@ -79,7 +83,9 @@ while True:
                 y2.append(height)
 
                 amplitude = (max(y2) - min(y2)) / 2
-                print("Amplitude: ", amplitude)
+                text = "Amplitude: " + str(round(amplitude, 3)) + "cm"
+                figtext.set_text(text)
+
                 # Send warning email if height is larger
                 if (amplitude) > WARNING_HEIGHT:
                     # Limit emails to every 10 minutes
