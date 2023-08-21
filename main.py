@@ -21,8 +21,6 @@ BASE = 101000
 ROU = 1000 # Density in kg/m^3
 GRA = 9.81
 
-max_height = 0
-low_height = math.inf
 WARNING_HEIGHT = 20 
 # Email addresses to alert
 RECIPIENTS = []
@@ -55,9 +53,6 @@ while True:
             incoming = float(ser.readline().decode("UTF-8").rstrip())
             # Multiply by 100 to convert to cm
             height = max(100 * (incoming - BASE) / (ROU * GRA), 0)
-
-            #max_height = max(height, max_height)
-            #low_height = min(height, low_height)
 
             # Initialize the graph when the value is stabilized.
             if i == MIN:
