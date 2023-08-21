@@ -65,7 +65,8 @@ while True:
             incoming = float(ser.readline().decode("UTF-8").rstrip())
             # Multiply by 100 to convert to cm
             # 99500 is the base pressure
-            height = 100 * (incoming - 99500) / (ROU * GRA)
+            # Divide by 2 for calibrations
+            height = 100 * (incoming - 99500) / (2 * ROU * GRA)
             # To account for calibration errors
             if height < 0:
                 height = 0
