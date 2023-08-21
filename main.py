@@ -66,7 +66,6 @@ while True:
             # Receive the incoming graph
             incoming = float(ser.readline().decode("UTF-8").rstrip())
             # Multiply by 100 to convert to cm
-            # 99500 is the base pressure
             height = 100 * (incoming - BASE) / (ROU * GRA)
             # To account for calibration errors
             if height < 0:
